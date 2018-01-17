@@ -40,11 +40,13 @@ If a new container with the label `RP_VIRTUAL_HOST` is created the following ste
 
 ## Portal
 
-This container can generate a simple portal (frontend) for all its proxied applications (using PORTAL labels). To enable this feature you have to set the environment variable `ENABLE_PORTAL` to `true`
+This container can generate a simple portal (frontend) for all its proxied applications (using PORTAL labels). To enable this feature you have to set the environment variable `PORTAL_URL` to a domain e.g portal.example.org
 
 additionally you can customize the portal through the following variables
 
 * `PORTAL_TITLE` : the heading title of the portal (default "The Portal")
+
+### Entries
 
 To have a container appear in portal set the following labels on it:
 
