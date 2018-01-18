@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dockernet Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="shortcut icon" href="/favicon">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-3" style="background-color:#ffffff;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 style="margin-left:10px;">The Dockernet</h1></div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding-top:10px;">
+            <div class="col-md-12 col-lg-6 col-lg-offset-7">
+                <ul class="list-group">
+                    % i = 0
+                    % for app in apps:
+                        <li class="list-group-item app">
+                            <div class="media" data-aos="fade-right" data-aos-delay="{{i*100}}">
+                                <div class="media-left">
+                                    <a href="{{app.get('link', '#')}}" target="_blank">
+                                        <img src="{{app.get('logo', '')}}" width="50" class="logo">
+                                    </a>
+                                </div>
+                                <div class="media-body">
+                                    <h4 class="media-heading">{{app.get('title', '')}} </h4>
+                                    <p>{{!app.get('description', '')}}</p>
+                                </div>
+                            </div>
+                        </li>
+                    % i+=1
+                    % end
+                    <!--
+                    <li class="list-group-item app">
+                        <div class="media" data-aos="fade-right">
+                            <div class="media-left">
+                                <a>
+                                    <a href="https://port.irbe.ch" target="_blank"><img src="assets/img/logos/portainer.png" width="50" class="logo"></a>
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">Portainer </h4>
+                                <p>Docker Management Web Interface</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item app">
+                        <div class="media" data-aos="fade-right" data-aos-delay="100">
+                            <div class="media-left">
+                                <a>
+                                    <a href="https://news.irbe.ch" target="_blank"><img src="assets/img/logos/ttrss.png" class="logo"></a>
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">Tiny Tiny RSS</h4>
+                                <p>open source web-based news feed (RSS/Atom) reader and aggregator </p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item app">
+                        <div class="media" data-aos="fade-right" data-aos-delay="200">
+                            <div class="media-left">
+                                <a>
+                                    <a href="https://webmail.irbe.ch" target="_blank"><img src="assets/img/logos/rainloop.png" class="logo"></a>
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">Rainloop </h4>
+                                <p><strong>RainLoop</strong> Webmail - Simple, modern &amp; fast web-based email client </p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item app">
+                        <div class="media" data-aos="fade-right" data-aos-delay="300">
+                            <div class="media-left">
+                                <a>
+                                    <a href="https://git.irbe.ch" target="_blank"><img src="assets/img/logos/gitlab.png" class="logo"></a>
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">GitLab </h4>
+                                <p><strong>GitLab</strong> is a web-based&nbsp;Git repository manager with&nbsp;wiki and&nbsp;issue tracking features </p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item app">
+                        <div class="media" data-aos="fade-right" data-aos-delay="400">
+                            <div class="media-left">
+                                <a>
+                                    <a href="https://chat.irbe.ch" target="_blank"><img src="assets/img/logos/lounge.png" class="logo"></a>
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">Lounge </h4>
+                                <p><strong>The Lounge</strong> — Modern self-hosted web IRC client </p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item app">
+                        <div class="media" data-aos="fade-right" data-aos-delay="500">
+                            <div class="media-left">
+                                <a>
+                                    <a href="https://stats.irbe.ch" target="_blank"><img src="assets/img/logos/grafana.png" class="logo"></a>
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">Monitoring </h4>
+                                <p>Docker Container Monitoring based on Grafana and cAdvisor</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item app">
+                        <div class="media" data-aos="fade-right" data-aos-delay="600">
+                            <div class="media-left">
+                                <a>
+                                    <a href="https://mc.irbe.ch" target="_blank"><img src="assets/img/logos/mailcow.png" class="logo"></a>
+                                </a>
+                            </div>
+                            <div class="media-body">
+                                <h4 class="media-heading">Mailcow </h4>
+                                <p>mailcow is a mail server suite based on Dovecot, Postfix and other open source software, that provides a modern web UI for user/server administration </p>
+                            </div>
+                        </div>
+                    </li>
+                    -->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="assets/js/bs-animation.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>
+</body>
+
+</html>

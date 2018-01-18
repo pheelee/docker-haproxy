@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
 import os
+import re
+import urllib2
 import docker
 import json
 import subprocess
@@ -14,6 +16,8 @@ BASE_URL = 'http+unix://%s' % '/var/run/docker.sock'.replace('/', '%2F')
 HAPROXY_TPL = '/usr/local/etc/haproxy/haproxy.cfg.tpl'
 HAPROXY_CFG = '/usr/local/etc/haproxy/haproxy.cfg'
 
+USE_PORTAL = False
+
 CERT_PATH = '/etc/letsencrypt/live'
 
 client = docker.from_env()
@@ -24,11 +28,20 @@ def build_config():
 
     print("Scanning Environment and update config")
     proxyconf = {}
+    portalcfg = []
     all_frontends = ''
     all_backends = ''
 
+    # Check if Portal is enabled
+    portalurl = os.environ.get('PORTAL_URL', '')
+    if portalurl != '':
+        USE_PORTAL = True
+        tld = ''.join(portalurl.split('.')[-2:])
+        email = 'webmaster@%s' % tld
+        proxyconf[tld] = {'email': email, 'san': [{'container': '127.0.0.1:8080', 'url': portalurl}]}
     for c in client.containers():
         if 'RP_VIRTUAL_HOST' in c.get('Labels', {}):
+
             virtual_host = c['Labels']['RP_VIRTUAL_HOST']
             container_port = c['Labels']['RP_VIRTUAL_HOST'].split(':')[1]
             container_name = c['Names'][0].lstrip('/')
@@ -44,11 +57,26 @@ def build_config():
             except socket.gaierror:
                 print('[ERROR] Could not resolve: %s, skipping host' % container_name)
 
+            if 'PORTAL_NAME' in c.get('Labels', {}):
+                portalcfg.append({
+                    'container': '%s:%s' % (container_name, container_port),
+                    'link': 'https://%s' % container_url,
+                    'logo': c['Labels'].get('PORTAL_ICON', '/logo/%s' % container_name),
+                    'description': c['Labels'].get('PORTAL_DESC', ''),
+                    'title': c['Labels']['PORTAL_NAME']
+                    })
+
+
+    if USE_PORTAL is True:
+        # Create Portal Config
+        with open('/portal/data/links.txt', 'w') as f:
+            f.write(json.dumps(portalcfg))
+
     # Get Certificates
     for dom in proxyconf:
         cmd = CERTBOT_CMD % (','.join([p['url'] for p in proxyconf[dom]['san']]), proxyconf[dom]['email'])
         print('Certbot cmd: ' + cmd)
-        if not DEBUG: subprocess.check_call(cmd.split(' '))
+        if not DEBUG: subprocess.check_output(cmd.split(' '))
 
         # Create Haproxy Config
         all_frontends += '\n    '.join(['use_backend %s if { hdr_dom(host) -i %s }' % (p['url'], p['url']) for p in proxyconf[dom]['san']])

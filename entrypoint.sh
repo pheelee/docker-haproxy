@@ -10,8 +10,11 @@ if [[ ! -f /usr/local/etc/haproxy/haproxy.cfg ]]; then
     haproxy -f $HAPROXY_DIR/leproxy.cfg -p /run/haproxy.pid -D
 fi
 
-python /config/GenerateHAProxyConfig.py
- 
+chmod +x /config/*.py
+
+python /portal/portal.py &
+python /config/GenerateHAProxyConfig.py $DEBUG
+
 
 # Generate HAProxy Certs
 #for site in `ls -1 /etc/letsencrypt/live`; do
