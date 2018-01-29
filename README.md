@@ -22,9 +22,10 @@ pheelee/haproxy
 
 create a container and add a label named `RP_VIRTUAL_HOST` specifing the domain name and exposed container port to it.
 
-**Example**:
+**Examples**:
 
 `RP_VIRTUAL_HOST=foo.example.com:8080`
+`RP_VIRTUAL_HOST=www.example.com, foo.example.com:8080`
 
 this generates a certificate (or adds the subdomain to an existing as SAN) for the domain foo.example.com and creates a reverse proxy entry for the container that owns the label. The port has to match the exposed port of the containers web application.
 

@@ -2,10 +2,6 @@
 
 HAPROXY_DIR=/usr/local/etc/haproxy
 
-if [[ ! -d /usr/local/etc/haproxy/certs ]]; then
-        mkdir $HAPROXY_DIR/certs
-fi
-
 if [[ ! -f /usr/local/etc/haproxy/haproxy.cfg ]]; then
     haproxy -f $HAPROXY_DIR/leproxy.cfg -p /run/haproxy.pid -D
 fi

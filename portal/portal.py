@@ -20,7 +20,7 @@ def get_links():
     if os.path.isfile(CONFIG_FILE):
         with open(CONFIG_FILE, 'r') as f:
             links = json.loads(f.read())
-    return links
+    return list(reversed(links))
 
 
 @app.route('/')
@@ -56,7 +56,7 @@ def logo(container_name):
         try:
             r = urllib2.urlopen('http://%s' % container)
             html = r.read()
-            favicon = re.findall('<link.*?icon.*?href="(.*?)"', html)
+            favicon = re.findall('<link.*?icon.*?href=["\'](.*?)["\']', html)
             if len(favicon) > 0:
                 url = 'http://%s/%s' % (container, favicon[0].lstrip('/'))
                 r = urllib2.urlopen(url)
@@ -79,4 +79,4 @@ def background():
 if __name__ == '__main__':
     if not os.path.isdir(DATA_PATH):
         os.mkdir(DATA_PATH)
-    app.run()
+    app.run(server='paste')
