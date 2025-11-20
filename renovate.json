@@ -1,0 +1,25 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [
+        "config:recommended",
+        "group:allNonMajor",
+        ":automergeMinor",
+        ":disableMajorUpdates"
+    ],
+    "packageRules": [
+        {
+            "groupName": "Github Actions",
+            "matchManagers": [
+                "github-actions"
+            ],
+            "matchPackageNames": [
+                "*"
+            ],
+            "matchUpdateTypes": [
+                "patch",
+                "minor",
+                "major"
+            ]
+        }
+    ]
+}
